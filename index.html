@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>松果小铺 · Demo Shop</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: -apple-system, "PingFang SC", system-ui, sans-serif; background: #f7f8fa; color: #1f2430; }
+      header { background: #111827; color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+      header .brand { font-size: 18px; font-weight: 700; }
+      header nav a { color: #cbd5e1; margin-left: 16px; text-decoration: none; font-size: 14px; }
+      .hero { padding: 28px 24px; }
+      .hero h1 { margin: 0 0 6px; font-size: 22px; }
+      .hero p { margin: 0; color: #6b7280; font-size: 14px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; padding: 8px 24px 24px; }
+      .product { background: #fff; border: 1px solid #eef0f4; border-radius: 12px; padding: 16px; }
+      .product .thumb { height: 96px; border-radius: 8px; background: linear-gradient(135deg, #e0e7ff, #fce7f3); margin-bottom: 12px; }
+      .product h3 { margin: 0 0 4px; font-size: 15px; }
+      .product .price { font-size: 18px; font-weight: 700; color: #ef4444; margin: 6px 0 12px; }
+      .product .actions { display: flex; gap: 8px; }
+      button { cursor: pointer; border: none; border-radius: 8px; padding: 8px 12px; font-size: 13px; font-weight: 600; }
+      .btn-cart { background: #eef2ff; color: #4338ca; }
+      .btn-buy { background: #ef4444; color: #fff; }
+      .subscribe { background: #fff; margin: 0 24px 32px; padding: 20px; border-radius: 12px; border: 1px solid #eef0f4; }
+      .subscribe h2 { margin: 0 0 12px; font-size: 16px; }
+      .subscribe form { display: flex; gap: 8px; flex-wrap: wrap; }
+      .subscribe input { padding: 9px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; flex: 1; min-width: 200px; }
+      .btn-submit { background: #111827; color: #fff; }
+      footer { text-align: center; color: #9ca3af; font-size: 12px; padding: 16px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">🌰 松果小铺</div>
+      <nav>
+        <a href="#home" id="nav-home">首页</a>
+        <a href="#deals" id="nav-deals">优惠</a>
+        <a href="#cart" id="nav-cart">购物车</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1>夏日清凉特惠</h1>
+      <p>全场满 99 包邮，演示用假数据，点点看会被自动采集。</p>
+    </section>
+
+    <main class="grid" id="product-grid">
+      <div class="product" data-tp-card data-sku="p-espresso">
+        <div class="thumb"></div>
+        <h3>手冲咖啡豆 200g</h3>
+        <div class="price">¥39</div>
+        <div class="actions">
+          <button class="btn-cart">加入购物车</button>
+          <button class="btn-buy">立即购买</button>
+        </div>
+      </div>
+      <div class="product" data-tp-card data-sku="p-mug">
+        <div class="thumb"></div>
+        <h3>陶瓷马克杯</h3>
+        <div class="price">¥59</div>
+        <div class="actions">
+          <button class="btn-cart">加入购物车</button>
+          <button class="btn-buy">立即购买</button>
+        </div>
+      </div>
+      <div class="product" data-tp-card data-sku="p-kettle">
+        <div class="thumb"></div>
+        <h3>细口手冲壶</h3>
+        <div class="price">¥129</div>
+        <div class="actions">
+          <button class="btn-cart">加入购物车</button>
+          <button class="btn-buy">立即购买</button>
+        </div>
+      </div>
+      <div class="product" data-tp-card data-sku="p-filter">
+        <div class="thumb"></div>
+        <h3>滤纸 100 张</h3>
+        <div class="price">¥19</div>
+        <div class="actions">
+          <button class="btn-cart">加入购物车</button>
+          <button class="btn-buy">立即购买</button>
+        </div>
+      </div>
+    </main>
+
+    <section class="subscribe" id="subscribe">
+      <h2>订阅优惠邮件</h2>
+      <form id="subscribe-form" onsubmit="return false;">
+        <input type="email" id="sub-email" placeholder="you@example.com" />
+        <button class="btn-submit" type="submit">提交订阅</button>
+      </form>
+    </section>
+
+    <footer>TrackPilot Demo · 松果小铺（纯演示，无真实交易）</footer>
+
+    <!-- TRACKPILOT_SNIPPET -->
+  </body>
+</html>
