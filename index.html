@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电影精选 - 发现好电影</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0f0f1a;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 40px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #667eea;
+        }
+
+        .categories {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .category-tag {
+            padding: 8px 20px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            background: transparent;
+            color: #a8b4ff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .category-tag.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .movies-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .movie-card {
+            background: #1a1a2e;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .movie-info {
+            padding: 15px;
+        }
+
+        .movie-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #a8b4ff;
+        }
+
+        .movie-rating {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        .movie-genre {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(102, 126, 234, 0.2);
+            border-radius: 10px;
+            font-size: 11px;
+            color: #a8b4ff;
+            margin-top: 8px;
+        }
+
+        .movie-detail {
+            display: none;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .movie-detail.active {
+            display: block;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(102, 126, 234, 0.2);
+            border: none;
+            border-radius: 20px;
+            color: #a8b4ff;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .detail-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .detail-poster {
+            width: 100%;
+            height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+        }
+
+        .detail-info h1 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .detail-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            color: #a8b4ff;
+            font-size: 14px;
+        }
+
+        .detail-rating {
+            font-size: 24px;
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .detail-description {
+            line-height: 1.8;
+            color: #ccc;
+            margin-bottom: 25px;
+        }
+
+        .detail-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-play {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-favorite {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 12px 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span>🎬</span>
+                <span>电影精选</span>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索电影..." onkeyup="searchMovies(this.value)">
+            </div>
+            <div class="user-actions">
+                <button class="btn btn-outline" onclick="showFavorite()">我的收藏</button>
+                <button class="btn btn-primary" onclick="showHistory()">观看历史</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="categories" id="categories">
+        <button class="category-tag active" onclick="filterByCategory('全部', this)">全部</button>
+        <button class="category-tag" onclick="filterByCategory('动作', this)">动作</button>
+        <button class="category-tag" onclick="filterByCategory('科幻', this)">科幻</button>
+        <button class="category-tag" onclick="filterByCategory('爱情', this)">爱情</button>
+        <button class="category-tag" onclick="filterByCategory('喜剧', this)">喜剧</button>
+        <button class="category-tag" onclick="filterByCategory('悬疑', this)">悬疑</button>
+        <button class="category-tag" onclick="filterByCategory('动画', this)">动画</button>
+    </div>
+
+    <div class="movies-section" id="moviesSection">
+        <h2 class="section-title">🔥 热门推荐</h2>
+        <div class="movies-grid" id="hotMovies"></div>
+
+        <h2 class="section-title">🆕 最新上线</h2>
+        <div class="movies-grid" id="newMovies"></div>
+    </div>
+
+    <div class="movie-detail" id="movieDetail">
+        <button class="back-button" onclick="showMovies()">← 返回列表</button>
+        <div class="detail-content">
+            <div class="detail-poster" id="detailPoster"></div>
+            <div class="detail-info">
+                <h1 id="detailTitle"></h1>
+                <div class="detail-meta">
+                    <span id="detailYear"></span>
+                    <span id="detailDuration"></span>
+                    <span id="detailGenre"></span>
+                </div>
+                <div class="detail-rating" id="detailRating"></div>
+                <p class="detail-description" id="detailDescription"></p>
+                <div class="detail-actions">
+                    <button class="btn-play" onclick="playMovie()">▶ 立即播放</button>
+                    <button class="btn-favorite" onclick="addToFavorite()">♥ 收藏</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const movies = [
+            { id: 1, title: "星际穿越", emoji: "🚀", year: 2014, duration: "169分钟", genre: "科幻", rating: 9.3, description: "在地球面临生存危机时，一组探险家穿越虫洞，寻找人类新家园的壮丽旅程。", hot: true, new: false },
+            { id: 2, title: "肖申克的救赎", emoji: "🏛️", year: 1994, duration: "142分钟", genre: "剧情", rating: 9.7, description: "银行家安迪被冤枉入狱，在肖申克监狱中，他用智慧和毅力赢得了狱友的尊重，并最终实现了惊人的越狱计划。", hot: true, new: false },
+            { id: 3, title: "你的名字。", emoji: "💫", year: 2016, duration: "106分钟", genre: "动画", rating: 8.4, description: "东京的少年和乡下小镇的少女，两人梦中身体互换，展开了一段跨越时空的奇妙爱情故事。", hot: true, new: false },
+            { id: 4, title: "盗梦空间", emoji: "🌀", year: 2010, duration: "148分钟", genre: "科幻", rating: 9.3, description: "一群能够进入他人梦境窃取思想的盗梦者，接受了一项看似不可能的任务——在目标脑海中植入一个想法。", hot: true, new: false },
+            { id: 5, title: "泰坦尼克号", emoji: "🚢", year: 1997, duration: "194分钟", genre: "爱情", rating: 9.4, description: "在豪华邮轮泰坦尼克号上，穷画家杰克和贵族千金露丝跨越阶级的凄美爱情故事，成为影史经典。", hot: true, new: false },
+            { id: 6, title: "复仇者联盟4", emoji: "🦸", year: 2019, duration: "181分钟", genre: "动作", rating: 8.4, description: "在灭霸消灭宇宙一半生命后，复仇者们集结最后的力量，展开一场跨越时空的终极决战。", hot: true, new: false },
+            { id: 7, title: "你好，李焕英", emoji: "🎭", year: 2021, duration: "128分钟", genre: "喜剧", rating: 7.8, description: "女儿穿越回1981年，遇见年轻时母亲的爆笑感人故事，笑中带泪，温暖人心。", hot: false, new: true },
+            { id: 8, title: "流浪地球2", emoji: "🌍", year: 2023, duration: "173分钟", genre: "科幻", rating: 8.3, description: "太阳危机逼近，人类启动流浪地球计划，在危机面前，每个人都在为地球的未来而战。", hot: false, new: true },
+            { id: 9, title: "消失的她", emoji: "🔍", year: 2023, duration: "122分钟", genre: "悬疑", rating: 7.5, description: "丈夫在旅行中失踪，妻子报警后丈夫却安然归来，但她坚称这不是自己的丈夫，真相扑朔迷离。", hot: false, new: true },
+            { id: 10, title: "飞驰人生", emoji: "🏎️", year: 2023, duration: "118分钟", genre: "喜剧", rating: 7.9, description: "过气赛车手重返赛场，在笑料百出的训练中，重新找回速度与激情的故事。", hot: false, new: true }
+        ];
+
+        let currentMovie = null;
+
+        function init() {
+            renderMovies();
+        }
+
+        function renderMovies(filter = '全部', search = '') {
+            const hotMovies = document.getElementById('hotMovies');
+            const newMovies = document.getElementById('newMovies');
+            
+            let filteredMovies = movies.filter(m => {
+                const matchCategory = filter === '全部' || m.genre === filter;
+                const matchSearch = search === '' || m.title.toLowerCase().includes(search.toLowerCase());
+                return matchCategory && matchSearch;
+            });
+
+            const hotHTML = filteredMovies.filter(m => m.hot).map(m => createMovieCard(m)).join('');
+            const newHTML = filteredMovies.filter(m => m.new).map(m => createMovieCard(m)).join('');
+            
+            hotMovies.innerHTML = hotHTML || '<p style="color: #a8b4ff;">暂无符合条件的电影</p>';
+            newMovies.innerHTML = newHTML || '<p style="color: #a8b4ff;">暂无符合条件的电影</p>';
+        }
+
+        function createMovieCard(movie) {
+            return `
+                <div class="movie-card" onclick="showDetail(${movie.id})">
+                    <div class="movie-poster">${movie.emoji}</div>
+                    <div class="movie-info">
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="movie-meta">
+                            <span>${movie.year}</span>
+                            <span class="movie-rating">⭐ ${movie.rating}</span>
+                        </div>
+                        <span class="movie-genre">${movie.genre}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterByCategory(category, element) {
+            document.querySelectorAll('.category-tag').forEach(tag => tag.classList.remove('active'));
+            element.classList.add('active');
+            const search = document.getElementById('searchInput').value;
+            renderMovies(category, search);
+        }
+
+        function searchMovies(value) {
+            const activeCategory = document.querySelector('.category-tag.active').textContent;
+            renderMovies(activeCategory, value);
+        }
+
+        function showDetail(movieId) {
+            currentMovie = movies.find(m => m.id === movieId);
+            if (!currentMovie) return;
+
+            document.getElementById('moviesSection').style.display = 'none';
+            document.getElementById('categories').style.display = 'none';
+            document.getElementById('movieDetail').classList.add('active');
+
+            document.getElementById('detailPoster').textContent = currentMovie.emoji;
+            document.getElementById('detailTitle').textContent = currentMovie.title;
+            document.getElementById('detailYear').textContent = currentMovie.year;
+            document.getElementById('detailDuration').textContent = currentMovie.duration;
+            document.getElementById('detailGenre').textContent = currentMovie.genre;
+            document.getElementById('detailRating').textContent = `⭐ ${currentMovie.rating} 分`;
+            document.getElementById('detailDescription').textContent = currentMovie.description;
+        }
+
+        function showMovies() {
+            document.getElementById('moviesSection').style.display = 'block';
+            document.getElementById('categories').style.display = 'flex';
+            document.getElementById('movieDetail').classList.remove('active');
+        }
+
+        function showFavorite() {
+            alert('收藏功能开发中...');
+        }
+
+        function showHistory() {
+            alert('观看历史功能开发中...');
+        }
+
+        function playMovie() {
+            if (currentMovie) {
+                alert(`正在播放：${currentMovie.title}`);
+            }
+        }
+
+        function addToFavorite() {
+            if (currentMovie) {
+                alert(`已将《${currentMovie.title}》添加到收藏`);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
